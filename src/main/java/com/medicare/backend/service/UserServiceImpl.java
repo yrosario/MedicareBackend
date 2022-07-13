@@ -16,7 +16,7 @@ public class UserServiceImpl implements GenericService<User, Long> {
 	private UserRepository userRepository;
 	
 	@Override
-	public User addUser(User user) {
+	public User save(User user) {
 		
 		return userRepository.save(user);
 	}

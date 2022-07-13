@@ -25,7 +25,7 @@ public class UserResource {
 	
 	@PostMapping()
 	public ResponseEntity<User> addUser(@RequestBody User u){
-		User user = userService.addUser(u);
+		User user = userService.save(u);
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.CREATED);
 		}

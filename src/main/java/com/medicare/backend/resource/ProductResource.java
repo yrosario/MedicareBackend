@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medicare.backend.model.Category;
 import com.medicare.backend.model.Product;
 import com.medicare.backend.service.GenericService;
 
@@ -23,14 +24,26 @@ public class ProductResource {
 	@Autowired
 	private GenericService<Product,Long> productService;
 	
+	@Autowired
+	private GenericService<Category, Long> categoryService;
+	
 	@PostMapping()
-	public ResponseEntity<Product> addProduct(@RequestBody Product u){
-		Product Product = productService.save(u);
-		if(Product != null) {
-			return new ResponseEntity<Product>(Product, HttpStatus.CREATED);
+	public ResponseEntity<Product> addProduct(@RequestBody Product p){
+		Product product = productService.save(p);
+		
+		
+		Category category = categoryService.findById(product.getCategory().getId());
+		
+		if(category == null) {
+			return new ResponseEntity<>(product, HttpStatus.BAD_REQUEST);
+		}
+		product.setCategory(category);
+		
+		if(product != null) {
+			return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 		}
 		
-		return new ResponseEntity<Product>(Product, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Product>(product, HttpStatus.BAD_REQUEST);
 	}
 	
 	@GetMapping()

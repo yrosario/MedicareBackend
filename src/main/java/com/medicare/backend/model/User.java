@@ -1,9 +1,16 @@
 package com.medicare.backend.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -12,14 +19,22 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private final Long id;
+	private final Long uid;
 	private String firstname;
 	private String lastname;
 	private String email;
 	private String password;
+
+	@ManyToMany(cascade = { CascadeType.ALL})
+	@JoinTable(
+			name="o_order",
+			joinColumns = { @JoinColumn(name = "uid", nullable = false )},
+			inverseJoinColumns = { @JoinColumn(name = "pid", nullable = false ) }
+			)
+	private Set<Product> products = new HashSet<>();
 	
 	public User() {
-		this.id = null;
+		this.uid = null;
 	}
 	
 	public User(String firstname, String lastname, String email) {
@@ -54,7 +69,7 @@ public class User {
 	}
 
 	public Long getId() {
-		return id;
+		return uid;
 	}
 
 	public String getPassword() {
@@ -65,11 +80,21 @@ public class User {
 		this.password = password;
 	}
 
+	public Set<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(Product product) {
+		if(product != null) {
+		     this.products.add(product);
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("User [id=");
-		builder.append(id);
+		builder.append(uid);
 		builder.append(", firstname=");
 		builder.append(firstname);
 		builder.append(", lastname=");

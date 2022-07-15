@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+
 @Entity
 @Table(name="user")
 public class User {
@@ -32,6 +34,7 @@ public class User {
 			joinColumns = { @JoinColumn(name = "uid", nullable = false )},
 			inverseJoinColumns = { @JoinColumn(name = "pid", nullable = false ) }
 			)
+
 	private Set<Product> products = new HashSet<>();
 	
 	@ManyToOne
@@ -42,11 +45,12 @@ public class User {
 		this.uid = null;
 	}
 	
-	public User(String firstname, String lastname, String email) {
+	public User(String firstname, String lastname, String email, Set<Product> products) {
 		this();
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.email = email;
+		this.products = products;
 	}
 
 	public String getFirstname() {

@@ -19,8 +19,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="product")
 public class Product {
 
-	@Id
+	@Id()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private final Long pid;
 	private String name;
 	private float price;
@@ -67,7 +68,7 @@ public class Product {
 		this.imageUrl = imageUrl;
 	}
 
-	public Long getId() {
+	public Long getPid() {
 		return pid;
 	}
 
@@ -93,7 +94,7 @@ public class Product {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Product [id=");
+		builder.append("Product [pid=");
 		builder.append(pid);
 		builder.append(", name=");
 		builder.append(name);

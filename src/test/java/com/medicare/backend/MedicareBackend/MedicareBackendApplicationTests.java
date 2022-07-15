@@ -28,7 +28,6 @@ class MedicareBackendApplicationTests {
 		user.setEmail("asdf@gmail.com");
 		
 		Product product = new Product();
-		product.setCategory("vitamin");
 		product.setImageUrl("adfa");
 		product.setName("Vitamin c");
 		product.setPrice(7.45f);

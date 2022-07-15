@@ -36,7 +36,7 @@ public class ProductServiceImpl implements GenericService<Product, Long> {
 
 	@Override
 	public Product update(Product Product) {
-		return productRepository.findById(Product.getId()).isPresent() ? productRepository.save(Product) : null;
+		return productRepository.findById(Product.getPid()).isPresent() ? productRepository.save(Product) : null;
 			
 	}
 

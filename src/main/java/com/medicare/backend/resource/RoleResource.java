@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +25,8 @@ public class RoleResource {
 	private GenericService<Role,Long> roleService;
 	
 	@PostMapping()
-	public ResponseEntity<Role> addRole(@RequestBody Role p){
-		Role Role = roleService.save(p);
+	public ResponseEntity<Role> addRole(@RequestBody Role r){
+		Role Role = roleService.save(r);
 		if(Role != null) {
 			return new ResponseEntity<Role>(Role, HttpStatus.CREATED);
 		}
@@ -58,6 +59,21 @@ public class RoleResource {
 		}
 		
 		return new ResponseEntity<>("Role was not found", HttpStatus.NOT_FOUND);
+	}
+	
+	@PutMapping()
+	public ResponseEntity<?> updateRole(@RequestBody Role r){
+		
+		if(r.getId() == null || roleService.findById(r.getId()) == null)  {
+			return new ResponseEntity<>("{role:not_found}",HttpStatus.NOT_FOUND);
+		}
+		
+		Role Role = roleService.save(r);
+		if(Role != null) {
+			return new ResponseEntity<Role>(Role, HttpStatus.CREATED);
+		}
+		
+		return new ResponseEntity<Role>(Role, HttpStatus.BAD_REQUEST);
 	}
 	
 

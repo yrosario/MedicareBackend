@@ -30,7 +30,7 @@ public class Product {
 	@JsonIgnore
 	@ManyToMany(mappedBy = "products")
 	private Set<User> users = new HashSet<>();
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private Category category;
 	
 	public Product() {

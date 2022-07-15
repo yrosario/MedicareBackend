@@ -33,7 +33,7 @@ public class UserServiceImpl implements GenericService<User, Long> {
 
 	@Override
 	public User update(User user) {
-		return userRepository.findById(user.getId()).isPresent() ? userRepository.save(user) : null;
+		return userRepository.findById(user.getUid()).isPresent() ? userRepository.save(user) : null;
 			
 	}
 

@@ -22,7 +22,7 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private final Long uid;
+	private Long uid;
 	private String firstname;
 	private String lastname;
 	private String email;
@@ -77,8 +77,13 @@ public class User {
 		this.email = email;
 	}
 
-	public Long getId() {
+
+	public Long getUid() {
 		return uid;
+	}
+
+	public void setUid(Long id) {
+		this.uid = id;
 	}
 
 	public String getPassword() {

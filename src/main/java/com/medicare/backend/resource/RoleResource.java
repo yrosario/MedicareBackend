@@ -24,8 +24,8 @@ public class RoleResource {
 	private GenericService<Role,Long> roleService;
 	
 	@PostMapping()
-	public ResponseEntity<Role> addRole(@RequestBody Role u){
-		Role Role = roleService.save(u);
+	public ResponseEntity<Role> addRole(@RequestBody Role p){
+		Role Role = roleService.save(p);
 		if(Role != null) {
 			return new ResponseEntity<Role>(Role, HttpStatus.CREATED);
 		}
@@ -59,5 +59,7 @@ public class RoleResource {
 		
 		return new ResponseEntity<>("Role was not found", HttpStatus.NOT_FOUND);
 	}
+	
+
 
 }

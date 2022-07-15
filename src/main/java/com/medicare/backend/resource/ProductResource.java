@@ -27,16 +27,20 @@ public class ProductResource {
 	@Autowired
 	private GenericService<Category, Long> categoryService;
 	
+	@SuppressWarnings("unused")
 	@PostMapping()
-	public ResponseEntity<Product> addProduct(@RequestBody Product p){
+	public ResponseEntity<?> addProduct(@RequestBody Product p){
+		
+		Category category = null;
+		
+		if(categoryService.findById(p.getCategory().getId()) != null ) {
+			category = categoryService.findById(p.getCategory().getId());
+		}else {
+			return new ResponseEntity<>("{category:not_found}", HttpStatus.NOT_FOUND);
+		}
+		
 		Product product = productService.save(p);
 		
-		
-		Category category = categoryService.findById(product.getCategory().getId());
-		
-		if(category == null) {
-			return new ResponseEntity<>(product, HttpStatus.BAD_REQUEST);
-		}
 		product.setCategory(category);
 		
 		if(product != null) {

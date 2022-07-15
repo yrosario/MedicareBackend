@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medicare.backend.model.Role;
 import com.medicare.backend.model.User;
 import com.medicare.backend.service.GenericService;
 
@@ -23,9 +24,31 @@ public class UserResource {
 	@Autowired
 	private GenericService<User,Long> userService;
 	
+	@Autowired
+	private GenericService<Role, Long> roleService;
+	
+	
 	@PostMapping()
 	public ResponseEntity<User> addUser(@RequestBody User u){
+		
+		
+	
 		User user = userService.save(u);
+		
+		Role role = null;
+		
+		if(user.getRole() == null || user.getRole().getId() == null) {
+			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
+		}
+		
+		role = roleService.findById(user.getRole().getId());
+		
+		if(role == null) {
+			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
+		}
+		
+		user.setRole(role);;
+		
 		if(user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.CREATED);
 		}

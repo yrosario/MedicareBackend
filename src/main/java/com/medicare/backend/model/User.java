@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -33,6 +34,10 @@ public class User {
 			)
 	private Set<Product> products = new HashSet<>();
 	
+	@ManyToOne
+	@JoinColumn(name="role_id")
+	private Role role;
+
 	public User() {
 		this.uid = null;
 	}
@@ -89,11 +94,20 @@ public class User {
 		     this.products.add(product);
 		}
 	}
+	
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("User [id=");
+		builder.append("User [uid=");
 		builder.append(uid);
 		builder.append(", firstname=");
 		builder.append(firstname);
@@ -103,9 +117,15 @@ public class User {
 		builder.append(email);
 		builder.append(", password=");
 		builder.append(password);
+		builder.append(", products=");
+		builder.append(products);
+		builder.append(", role=");
+		builder.append(role);
 		builder.append("]");
 		return builder.toString();
 	}
+
+
 	
 	
 

@@ -3,7 +3,6 @@
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +29,7 @@ public class Product {
 	@JsonIgnore
 	@ManyToMany(mappedBy = "products")
 	private Set<User> users = new HashSet<>();
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private Category category;
 	
 	public Product() {

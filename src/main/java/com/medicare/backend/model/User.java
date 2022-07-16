@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 
 
 
@@ -25,6 +26,7 @@ public class User {
 	private Long uid;
 	private String firstname;
 	private String lastname;
+	@Email 
 	private String email;
 	private String password;
 

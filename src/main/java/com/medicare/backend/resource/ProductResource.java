@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.medicare.backend.model.Category;
 import com.medicare.backend.model.Product;
@@ -108,5 +110,23 @@ public class ProductResource {
 		return new ResponseEntity<Product>(product, HttpStatus.BAD_REQUEST);
 	}
 	
+	@PostMapping("/{id}/upload")
+	public ResponseEntity<?> fileUpload(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file)
+	{	
+		Product product = productService.findById(id);
+		if(product == null) {
+			return new ResponseEntity<>("{Product:NOT_FOUND", HttpStatus.NOT_FOUND);
+		}
+		
+		try {
+			byte[] byteImage = file.getBytes();
+			product.setImageBlo(byteImage);
+			productService.save(product);
+			
+			return new ResponseEntity<>("Image:Creation_Successfully_Created", HttpStatus.CREATED);
+		}catch(Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+		}
+	}
 
 }

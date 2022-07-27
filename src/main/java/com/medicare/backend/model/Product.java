@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -23,9 +24,14 @@ public class Product {
 	@Column(name="id")
 	private final Long pid;
 	private String name;
+	private String brand;
 	private float price;
-	@Column(name="imageurl")
-	private String imageUrl;
+	private boolean active;
+	@Column(name="number_of_views")
+	private int numberOfViews = 0;
+	@Column(name="image_blob")
+	@Lob
+	private byte[] imageBlob;
 	@JsonIgnore
 	@ManyToMany(mappedBy = "products")
 	private Set<User> users = new HashSet<>();
@@ -36,11 +42,24 @@ public class Product {
 		this.pid = null;
 	}
 
+	public Product(String name, String brand, float price, boolean active, int numberOfViews, byte[] imageBlob,
+			Set<User> users, Category category) {
+		this();
+		this.name = name;
+		this.brand = brand;
+		this.price = price;
+		this.active = active;
+		this.numberOfViews = numberOfViews;
+		this.imageBlob = imageBlob;
+		this.users = users;
+		this.category = category;
+	}
+
 	public Product(String name, float price, String imageUrl) {
 		this();
 		this.name = name;
 		this.price = price;
-		this.imageUrl = imageUrl;
+		this.imageBlob = imageBlob;
 	}
 
 	public String getName() {
@@ -59,12 +78,12 @@ public class Product {
 		this.price = price;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public byte[] getImageBlob() {
+		return imageBlob;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImageBlo(byte[] imageBlob) {
+		this.imageBlob = imageBlob;
 	}
 
 	public Long getPid() {
@@ -89,6 +108,31 @@ public class Product {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public int getNumberOfViews() {
+		return numberOfViews;
+	}
+
+	public void setNumberOfViews(int numberOfViews) {
+		this.numberOfViews = numberOfViews;
+	}
 
 	@Override
 	public String toString() {
@@ -97,12 +141,20 @@ public class Product {
 		builder.append(pid);
 		builder.append(", name=");
 		builder.append(name);
-		builder.append(", category=");
-		builder.append(category);
+		builder.append(", brand=");
+		builder.append(brand);
 		builder.append(", price=");
 		builder.append(price);
-		builder.append(", imageUrl=");
-		builder.append(imageUrl);
+		builder.append(", active=");
+		builder.append(active);
+		builder.append(", numberOfViews=");
+		builder.append(numberOfViews);
+		builder.append(", imageBlob=");
+		builder.append(imageBlob);
+		builder.append(", users=");
+		builder.append(users);
+		builder.append(", category=");
+		builder.append(category);
 		builder.append("]");
 		return builder.toString();
 	}

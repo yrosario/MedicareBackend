@@ -29,6 +29,7 @@ public class Product {
 	private boolean active;
 	@Column(name="number_of_views")
 	private int numberOfViews = 0;
+	private int qty = 0;
 	@Column(name="image_blob")
 	@Lob
 	private byte[] imageBlob;
@@ -43,7 +44,7 @@ public class Product {
 	}
 
 	public Product(String name, String brand, float price, boolean active, int numberOfViews, byte[] imageBlob,
-			Set<User> users, Category category) {
+			Set<User> users, Category category, int qty) {
 		this();
 		this.name = name;
 		this.brand = brand;
@@ -53,14 +54,9 @@ public class Product {
 		this.imageBlob = imageBlob;
 		this.users = users;
 		this.category = category;
+		this.qty =0;
 	}
 
-	public Product(String name, float price, String imageUrl) {
-		this();
-		this.name = name;
-		this.price = price;
-		this.imageBlob = imageBlob;
-	}
 
 	public String getName() {
 		return name;
@@ -132,6 +128,15 @@ public class Product {
 
 	public void setNumberOfViews(int numberOfViews) {
 		this.numberOfViews = numberOfViews;
+	}
+	
+
+	public int getQty() {
+		return qty;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
 	}
 
 	@Override

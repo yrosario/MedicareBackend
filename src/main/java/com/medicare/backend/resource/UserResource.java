@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonParser;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserResource {
@@ -47,6 +49,7 @@ public class UserResource {
 		userFieldsList.add("firstname");
 		userFieldsList.add("lastname");
 		userFieldsList.add("email");
+		userFieldsList.add("username");
 		userFieldsList.add("password");
 		userFieldsList.add("role");
 		userFieldsList.add("products");
@@ -67,6 +70,7 @@ public class UserResource {
 		user.setLastname(map.get("lastname").toString());
 		user.setEmail(map.get("email").toString());
 		user.setPassword(map.get("password").toString());
+		user.setUsername(map.get("username").toString());
 				
 		
 		//Parse id value from role key and retrieve the role from the database then assign it to the user
@@ -136,6 +140,7 @@ public class UserResource {
 	public ResponseEntity<String> deleteUser(@PathVariable Long id){
 		User user = userService.findById(id);
 		if(user != null) {
+			userService.delete(id);
 			return new ResponseEntity<>("User was deleted", HttpStatus.OK);
 		}
 		

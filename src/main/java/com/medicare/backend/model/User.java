@@ -29,6 +29,7 @@ public class User {
 	@Email 
 	private String email;
 	private String password;
+	private String username;
 
 	@ManyToMany(cascade = { CascadeType.ALL})
 	@JoinTable(
@@ -47,12 +48,14 @@ public class User {
 		this.uid = null;
 	}
 	
-	public User(String firstname, String lastname, String email, Set<Product> products) {
+	public User(String firstname, String lastname, String email, Set<Product> products, String password, String username) {
 		this();
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.email = email;
 		this.products = products;
+		this.password = password;
+		this.username = username;
 	}
 
 	public String getFirstname() {
@@ -95,6 +98,16 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public Set<Product> getProducts() {
 		return products;
@@ -105,7 +118,6 @@ public class User {
 		     this.products.add(product);
 		}
 	}
-	
 	
 	public Role getRole() {
 		return role;
@@ -128,6 +140,8 @@ public class User {
 		builder.append(email);
 		builder.append(", password=");
 		builder.append(password);
+		builder.append(", username=");
+		builder.append(username);
 		builder.append(", products=");
 		builder.append(products);
 		builder.append(", role=");

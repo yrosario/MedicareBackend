@@ -52,7 +52,7 @@ public class UserResource {
 		userFieldsList.add("username");
 		userFieldsList.add("password");
 		userFieldsList.add("role");
-		userFieldsList.add("products");
+		//userFieldsList.add("products");
 					  
 	}
 	
@@ -71,47 +71,28 @@ public class UserResource {
 		user.setEmail(map.get("email").toString());
 		user.setPassword(map.get("password").toString());
 		user.setUsername(map.get("username").toString());
+		
+		//Deserialize Collections object of Products from map and assign it to the user
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 				
 		
 		//Parse id value from role key and retrieve the role from the database then assign it to the user
-		Long roleId = null;
+		Role role = null;
 		try {
-			String roleIdStr = map.get("role").toString();
-			roleIdStr = roleIdStr.strip().substring(4, roleIdStr.length()-1);
-			roleId = Long.parseLong(roleIdStr);
-		}catch(NumberFormatException e) {
-			return new ResponseEntity<>("{Exception:NumberFormatException}", HttpStatus.BAD_REQUEST);
+			String jsonString = new ObjectMapper().writeValueAsString(map.get("role"));
+			role = objectMapper.readValue(jsonString, new TypeReference<Role>() {});
+		}catch(JsonProcessingException e) {
+			return new ResponseEntity<>("{exception:bad_products_field " + e, HttpStatus.BAD_REQUEST);
 		}
 		
-		Role role = roleService.findById(roleId);
+		role = roleService.findById(role.getId());
 		if(role == null) {
 			return new ResponseEntity<>("{not_found:role}", HttpStatus.NOT_FOUND);
 		}
 		
 		user.setRole(role);
-		
-		//Deserialize Collections object of Products from map and assign it to the user
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-		
-		
-		
-		Collection<Product> products = null;
-		List<Product> productList = new ArrayList<>();
-		try {
-			String jsonString = new ObjectMapper().writeValueAsString(map.get("products"));
-			products = objectMapper.readValue(jsonString, new TypeReference<Collection<Product>>() {});
-
-			for(Product product : products) {
-				if(productService.findById(product.getPid()) != null) {
-					productList.add(productService.findById(product.getPid()));
-				}
-			}
-			productList.stream().forEach(product -> { user.setProducts(product);});
-		} catch (JsonProcessingException e) {
-			return new ResponseEntity<>("{exception:bad_products_field",HttpStatus.BAD_REQUEST);
-		}
-		
+				
 
 		//Save user to the database
 		userService.save(user);

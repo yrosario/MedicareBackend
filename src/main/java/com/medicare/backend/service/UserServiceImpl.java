@@ -46,5 +46,19 @@ public class UserServiceImpl implements GenericService<User, Long> {
 		
 		return false;
 	}
+	
+	public User findByUsername(String username) {
+        List<User> users = userRepository.findAll();
+		
+		if(users.isEmpty())
+			return null;
+			
+		
+		for(User user : users)
+			if(user.getUsername().equalsIgnoreCase(username))
+				return user;
+		
+		return null;
+	}
 
 }

@@ -23,6 +23,7 @@ import com.medicare.backend.model.Product;
 import com.medicare.backend.model.Role;
 import com.medicare.backend.model.User;
 import com.medicare.backend.service.GenericService;
+import com.medicare.backend.service.UserServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +35,7 @@ import com.fasterxml.jackson.core.JsonParser;
 public class UserResource {
 	
 	@Autowired
-	private GenericService<User,Long> userService;
+	private UserServiceImpl userService;
 	
 	@Autowired
 	private GenericService<Role, Long> roleService;
@@ -71,6 +72,12 @@ public class UserResource {
 		user.setEmail(map.get("email").toString());
 		user.setPassword(map.get("password").toString());
 		user.setUsername(map.get("username").toString());
+		
+		//Check if User exist
+		User userExist = userService.findByUsername(user.getUsername());
+		if(userExist != null) {
+			return new ResponseEntity<>("{User:User_already_exist}", HttpStatus.CONFLICT);
+		}
 		
 		//Deserialize Collections object of Products from map and assign it to the user
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -213,6 +220,24 @@ public class UserResource {
 		return new ResponseEntity<>(user,HttpStatus.OK);
 	}
 
+	
+	@GetMapping("/login")
+	public ResponseEntity<?> login(@RequestBody Map<String, String> map){
+		
+		String username = map.get("username");
+		String password = map.get("password");
+		
+		User user = userService.findByUsername(username);
+		if(user == null) {
+			return new ResponseEntity<>("Login:User_Not_Foudn", HttpStatus.NOT_FOUND);
+		}
+		
+		if(password == user.getPassword()) {
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>("Login:Bad_Password", HttpStatus.UNAUTHORIZED);
+	}
 	
 
 

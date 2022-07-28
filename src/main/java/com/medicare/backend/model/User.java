@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,8 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -40,12 +44,18 @@ public class User {
 
 	private Set<Product> products = new HashSet<>();
 	
+	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
+	@JsonIgnore
+	private Cart cart;
+	
 	@ManyToOne
 	@JoinColumn(name="role_id")
 	private Role role;
 
 	public User() {
 		this.uid = null;
+		this.cart = new Cart();
+		this.cart.setCartUser(this);
 	}
 	
 	public User(String firstname, String lastname, String email, Set<Product> products, String password, String username) {
@@ -126,6 +136,15 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+	
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
 	@Override
 	public String toString() {
@@ -144,6 +163,8 @@ public class User {
 		builder.append(username);
 		builder.append(", products=");
 		builder.append(products);
+		builder.append(", cart=");
+		builder.append(cart);
 		builder.append(", role=");
 		builder.append(role);
 		builder.append("]");

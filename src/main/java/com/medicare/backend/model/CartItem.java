@@ -1,0 +1,74 @@
+package com.medicare.backend.model;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+@Table(name="cart_item")
+public class CartItem {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private final Long id;
+	
+	private int quantity = 0;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JsonIgnore
+	private Cart cart;
+	
+	@ManyToOne(fetch =FetchType.EAGER)
+	private Product product;
+
+	public CartItem() {
+		this.id = null;
+	}
+	
+	public CartItem(int quantity, Cart cart, Product product) {
+		this();
+		this.quantity = quantity;
+		this.cart = cart;
+		this.product = product;
+	}
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+	
+	
+	
+	
+}

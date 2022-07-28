@@ -221,7 +221,7 @@ public class UserResource {
 	}
 
 	
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody Map<String, String> map){
 		
 		String username = map.get("username");
@@ -232,7 +232,9 @@ public class UserResource {
 			return new ResponseEntity<>("Login:User_Not_Foudn", HttpStatus.NOT_FOUND);
 		}
 		
-		if(password == user.getPassword()) {
+		
+		System.out.println("Password " + password + " USER " + user.getPassword());
+		if(password.equals(user.getPassword())) {
 			return new ResponseEntity<>(user, HttpStatus.OK);
 		}
 		

@@ -31,14 +31,11 @@ public class CartItem {
 		this.id = null;
 	}
 	
-	public CartItem(int quantity, Cart cart, Product product) {
+	public CartItem(Cart cart, Product product) {
 		this();
-		this.quantity = quantity;
 		this.cart = cart;
 		this.product = product;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -67,8 +64,21 @@ public class CartItem {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("CartItem [id=");
+		builder.append(id);
+		builder.append(", quantity=");
+		builder.append(quantity);
+		builder.append(", cart=");
+		builder.append(cart);
+		builder.append(", product=");
+		builder.append(product);
+		builder.append("]");
+		return builder.toString();
+	}
 	
 	
 }

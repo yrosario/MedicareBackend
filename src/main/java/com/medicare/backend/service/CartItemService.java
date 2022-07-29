@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.medicare.backend.model.CartItem;
 import com.medicare.backend.repository.CartItemRepository;
 
+@Service
 public class CartItemService implements GenericService<CartItem, Long>{
 
 	@Autowired
@@ -37,7 +39,7 @@ public class CartItemService implements GenericService<CartItem, Long>{
 	@Override
 	public boolean delete(Long id) {
 		if(cartItemRepository.findById(id).isPresent()) {
-			cartItemRepository.findById(id);
+			cartItemRepository.deleteById(id);
 			return true;
 		}
 		return false;

@@ -1,13 +1,16 @@
 package com.medicare.backend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.medicare.backend.model.Cart;
 import com.medicare.backend.repository.CartItemRepository;
 import com.medicare.backend.repository.CartRepository;
 
+@Service
 public class CartServiceImpl implements GenericService<Cart, Long> {
 	
 	@Autowired
@@ -23,24 +26,26 @@ public class CartServiceImpl implements GenericService<Cart, Long> {
 
 	@Override
 	public List<Cart> findAll() {
-		return null;
+		return this.cartRepository.findAll();
 	}
 
 	@Override
 	public Cart findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Cart> oCart = cartRepository.findById(id);
+		return oCart.isPresent() ? oCart.get() : null;
 	}
 
 	@Override
-	public Cart update(Cart t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Cart update(Cart cart) {
+		return cartRepository.save(cart);
 	}
 
 	@Override
 	public boolean delete(Long id) {
-		// TODO Auto-generated method stub
+		if(cartRepository.findById(id).isPresent()) {
+			cartRepository.deleteById(id);
+			return true;
+		}
 		return false;
 	}
 

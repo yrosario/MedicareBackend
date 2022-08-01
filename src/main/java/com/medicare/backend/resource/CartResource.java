@@ -80,7 +80,7 @@ public class CartResource {
 		cartItemService.save(cartItem);
 		
 		
-		return new ResponseEntity<>(product, HttpStatus.OK);
+		return new ResponseEntity<>(product, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}/item/{itemId}")

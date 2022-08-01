@@ -105,10 +105,10 @@ public class ProductResource {
 		product.setCategory(category);
 		
 		if(product != null) {
-			return new ResponseEntity<Product>(product, HttpStatus.CREATED);
+			return new ResponseEntity<Product>(product, HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<Product>(product, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/{id}/upload")

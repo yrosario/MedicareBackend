@@ -26,7 +26,7 @@ public class Product {
 	private String name;
 	private String brand;
 	private float price;
-	private boolean active;
+	private boolean active = true;
 	@Column(name="number_of_views")
 	private int numberOfViews = 0;
 	private int qty = 0;

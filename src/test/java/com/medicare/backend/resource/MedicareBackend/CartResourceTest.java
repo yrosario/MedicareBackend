@@ -87,23 +87,10 @@ public class CartResourceTest {
 				.andReturn();
 	}
 	
-	@Test
-	public void updateCart_test() throws Exception {
-
-		RequestBuilder request = MockMvcRequestBuilders
-				.put("/api/v1/cart/user/1")
-				.accept(MediaType.APPLICATION_JSON)
-				.content("{\"id\":1,\"quantity\":0,\"product\":{\"pid\":1,\"name\":\"Vitamin G\",\"brand\":null,\"price\":8.0,\"active\":false,\"numberOfViews\":0,\"qty\":0,\"imageBlob\":null,\"category\":{\"id\":1,\"name\":\"Cold/Flu Medicine\"}}}")
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON);
-		
-		MvcResult result = mockMvc.perform(request)
-				.andExpect(status().isCreated())
-				.andReturn();
-	}
 	
 	@Test
 	public void deleteItem_test() throws Exception {
+		
 		RequestBuilder request = MockMvcRequestBuilders
 				.delete("/api/v1/cart/user/1/item/1")
 				.accept(MediaType.APPLICATION_JSON)

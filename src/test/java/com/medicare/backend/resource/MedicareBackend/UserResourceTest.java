@@ -74,31 +74,6 @@ public class UserResourceTest {
 				.andReturn();
 	}
 	
-	@Test
-	public void updateUser_test() throws Exception {
-		
-		User user = new User();
-		user.setFirstname("Johny");
-		user.setLastname("Smith");
-		user.setEmail("jsmit@gmail.com");
-		user.setPassword("password");
-		user.setRole(new Role("TEST3"));
-		
-		user = userService.save(user);
-
-
-		RequestBuilder request = MockMvcRequestBuilders
-				.put("/api/v1/user")
-				.accept(MediaType.APPLICATION_JSON)
-				.content("{\"uid\":"+user.getUid() +",\"firstname\":\"tim\",\"lastname\":\"asdf\",\"email\":\"ad@gmail.com\",\"password\":\"password\",\"username\":\"test\",\"products\":[],\"role\":{\"id\":1,\"name\":\"Admin\"}}")
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON);
-		
-		MvcResult result = mockMvc.perform(request)
-				.andExpect(status().isCreated())
-				.andReturn();
-		
-	}
 	
 	@Test
 	public void deleteRole_test() throws Exception {

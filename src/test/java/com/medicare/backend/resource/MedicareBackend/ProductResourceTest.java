@@ -75,27 +75,6 @@ public class ProductResourceTest {
 				.andReturn();
 	}
 	
-	@Test
-	public void updaterProduct_test() throws Exception {
-		
-		Product product = new Product();
-		product.setName("TestProduct");
-		product.setPrice(23f);
-		
-		product = productService.save(product);
-
-		RequestBuilder request = MockMvcRequestBuilders
-				.put("/api/v1/product")
-				.accept(MediaType.APPLICATION_JSON)
-				.content("{\"pid:" + product.getPid() + ",\"name\":\"Vitamin TEST\",\"price\":8.0,\"category\":{\"id\":1}}")
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON);
-		
-		MvcResult result = mockMvc.perform(request)
-				.andExpect(status().isCreated())
-				.andReturn();
-		
-	}
 	
 	@Test
 	public void deleteRole_test() throws Exception {

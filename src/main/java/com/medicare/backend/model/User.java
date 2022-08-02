@@ -53,7 +53,6 @@ public class User {
 	private Role role;
 
 	public User() {
-		this.uid = null;
 		this.cart = new Cart();
 		this.cart.setCartUser(this);
 	}
@@ -146,30 +145,7 @@ public class User {
 		this.cart = cart;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("User [uid=");
-		builder.append(uid);
-		builder.append(", firstname=");
-		builder.append(firstname);
-		builder.append(", lastname=");
-		builder.append(lastname);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", password=");
-		builder.append(password);
-		builder.append(", username=");
-		builder.append(username);
-		builder.append(", products=");
-		builder.append(products);
-		builder.append(", cart=");
-		builder.append(cart);
-		builder.append(", role=");
-		builder.append(role);
-		builder.append("]");
-		return builder.toString();
-	}
+
 
 
 	

@@ -20,7 +20,7 @@ public class Cart {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private final Long id;
+	private  Long id;
 	
 	@OneToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
@@ -31,14 +31,13 @@ public class Cart {
 	private Set<CartItem> cartItems = new HashSet<CartItem>();
 
 	public Cart() {
-		this.id = null;
 	}
 
 
-	public Cart(User cartUser, Set<CartItem> cartItems) {
+	public Cart(User cartUser) {
 		this();
 		this.cartUser = cartUser;
-		this.cartItems = cartItems;
+		
 	}
 
 
@@ -62,6 +61,12 @@ public class Cart {
 	}
 
 
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 	public Long getId() {
 		return id;
 	}
@@ -69,15 +74,7 @@ public class Cart {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Cart [id=");
-		builder.append(id);
-		builder.append(", cartUser=");
-		builder.append(cartUser);
-		builder.append(", cartItems=");
-		builder.append(cartItems);
-		builder.append("]");
-		return builder.toString();
+		return "Cart [id=" + id + ", cartUser=" + cartUser + ", cartItems=" + cartItems + "]";
 	}
 	
 	

@@ -22,7 +22,7 @@ public class Product {
 	@Id()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private final Long pid;
+	private Long pid;
 	private String name;
 	private String brand;
 	private float price;

@@ -22,8 +22,8 @@ public class Category {
 		this.id = null;
 	}
 	
-	public Category(String name) {
-		this();
+	public Category(Long id, String name) {
+		this.id = id;
 		this.name = name;
 	}
 

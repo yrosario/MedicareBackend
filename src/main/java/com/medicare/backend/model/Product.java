@@ -1,7 +1,6 @@
  package com.medicare.backend.model;
 
-import java.util.HashSet;
-import java.util.Set;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -30,6 +28,8 @@ public class Product {
 	@Column(name="number_of_views")
 	private int numberOfViews = 0;
 	private int qty = 0;
+	
+	@JsonIgnore
 	@Column(name="image_blob")
 	@Lob
 	private byte[] imageBlob;
@@ -41,9 +41,9 @@ public class Product {
 		this.pid = null;
 	}
 
-	public Product(String name, String brand, float price, boolean active, int numberOfViews, byte[] imageBlob,
+	public Product(Long pid, String name, String brand, float price, boolean active, int numberOfViews, byte[] imageBlob,
 			 Category category, int qty) {
-		this();
+		this.pid = pid;
 		this.name = name;
 		this.brand = brand;
 		this.price = price;

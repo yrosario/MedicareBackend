@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.medicare.backend.model.Cart;
 import com.medicare.backend.model.CartItem;
+import com.medicare.backend.model.Category;
 import com.medicare.backend.model.Product;
 import com.medicare.backend.model.User;
 import com.medicare.backend.service.CartItemServiceImpl;
@@ -57,6 +58,32 @@ public class CartResourceTest {
 	
 	@MockBean
 	private UserServiceImpl userService;
+
+	private User user;
+	private Cart cart;
+	private List<CartItem> cartItems;
+	
+	
+	@BeforeEach
+	public  void setup(){
+		user = new User();
+		user.setFirstname("John");
+		user.setLastname("William");
+		user.setUid(1l);
+		
+		
+		cart = new Cart();
+		cartItems = new ArrayList();
+		Category category = new Category(1L,"Paint Relief");
+		
+		//Cart Items here
+		cartItems.add(new CartItem(1L, cart, new Product(1L, "Aspirin", "Aspirin inc", 8.99f, true,40,null,
+				category, 45)));
+		
+		cartItems.stream().forEach(item -> {cart.setCartItems(item);});
+        cart.setCartUser(user);
+        user.setCart(cart);
+	}
 	
 	@Test
 	public void getCartItem_no_user_test() throws Exception {
@@ -77,77 +104,73 @@ public class CartResourceTest {
 	
 	@Test
 	public void getCartItem_user_test() throws Exception {
-		
-		User user = new User();
-		user.setFirstname("John");
-		user.setLastname("William");
-		user.setUid(1l);
-		Cart cart = new Cart();
-		List<CartItem> cartItems = new ArrayList();
-		cartItems.add(new CartItem(cart, new Product()));
-		cartItems.stream().forEach(item -> {cart.setCartItems(item);});
-        cart.setCartUser(user);
-        user.setCart(cart);
-        
         
         when(userService.findById(Mockito.anyLong())).thenReturn(user);
-		//when(cartService.findById(Mockito.anyLong())).thenReturn(cart);
-        when(cartItemService.findAllById(Mockito.anyLong())).thenReturn(cartItems);
+	    when(cartItemService.findAllById(Mockito.anyLong())).thenReturn(cartItems);
+	    
+	    RequestBuilder request = MockMvcRequestBuilders.get("/api/v1/cart/user/1")
+				.accept(MediaType.APPLICATION_JSON);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart/user/1")
-						.accept(MediaType.APPLICATION_JSON))
-		    .andExpect(jsonPath("$.product").value("John"))
+		mockMvc.perform(request)
+		    .andExpect(jsonPath("$[0].id").value(1))
+		    .andExpect(jsonPath("$[0].quantity").value(0))
+		    .andExpect(jsonPath("$[0].product.pid").value(1))
+		    .andExpect(jsonPath("$[0].product.brand").value("Aspirin inc"))
+		    .andExpect(jsonPath("$[0].product.price").value(8.99))
+		    .andExpect(jsonPath("$[0].product.active").value(true))
+		    .andExpect(jsonPath("$[0].product.numberOfViews").value(40))
+		    .andExpect(jsonPath("$[0].product.qty").value(0))
+		    .andExpect(jsonPath("$[0].product.category.id").value(1))
+		    .andExpect(jsonPath("$[0].product.category.name").value("Paint Relief"))
+			.andExpect(status().isOk());
+		
+
+	}
+	
+	@Test
+	public void addItemToCart_test() throws Exception {
+     	
+        when(userService.findById(Mockito.anyLong())).thenReturn(user);
+	    when(cartItemService.save(Mockito.any(CartItem.class))).thenReturn(cartItems.get(0));
+	    
+	    RequestBuilder request = MockMvcRequestBuilders.post("/api/v1/cart/user/1")
+				.accept(MediaType.APPLICATION_JSON)
+	    		.content("{\"productId\":1}")
+	    		.contentType(MediaType.APPLICATION_JSON);
+	    
+		
+		mockMvc.perform(request)
+		    .andExpect(jsonPath("$[0].id").value(1))
+		    .andExpect(jsonPath("$[0].quantity").value(0))
+		    .andExpect(jsonPath("$[0].product.pid").value(1))
+		    .andExpect(jsonPath("$[0].product.brand").value("Aspirin inc"))
+		    .andExpect(jsonPath("$[0].product.price").value(8.99))
+		    .andExpect(jsonPath("$[0].product.active").value(true))
+		    .andExpect(jsonPath("$[0].product.numberOfViews").value(40))
+		    .andExpect(jsonPath("$[0].product.qty").value(0))
+		    .andExpect(jsonPath("$[0].product.category.id").value(1))
+		    .andExpect(jsonPath("$[0].product.category.name").value("Paint Relief"))
+			.andExpect(status().isCreated());
+		
+
+	}
+	
+	
+	@Test
+	public void deleteItemToCart_test() throws Exception {
+     	
+        when(userService.findById(Mockito.anyLong())).thenReturn(user);
+	    when(cartItemService.delete(Mockito.anyLong())).thenReturn(true);
+	    
+	    RequestBuilder request = MockMvcRequestBuilders.delete("/api/v1/cart/user/1/item/1")
+				.accept(MediaType.APPLICATION_JSON);
+	    
+		
+		mockMvc.perform(request)
 			.andExpect(status().isOk());
 		
 
 	}
 	
 
-//	@Test
-//	public void saveCart_test() throws Exception {
-//
-//		RequestBuilder request = MockMvcRequestBuilders
-//				.post("/api/v1/cart/user/1")
-//				.accept(MediaType.APPLICATION_JSON)
-//				.content("{\"productId\": 1}")
-//				.accept(MediaType.APPLICATION_JSON)
-//				.contentType(MediaType.APPLICATION_JSON);
-//		
-//		MvcResult result = mockMvc.perform(request)
-//				.andExpect(status().isCreated())
-//				.andReturn();
-//	}
-//	
-//	
-//	@Test
-//	public void deleteItem_test() throws Exception {
-//		
-//		RequestBuilder request = MockMvcRequestBuilders
-//				.delete("/api/v1/cart/user/1/item/1")
-//				.accept(MediaType.APPLICATION_JSON)
-//				.contentType(MediaType.APPLICATION_JSON);
-//		
-//		MvcResult result = mockMvc.perform(request)
-//				.andExpect(status().isOk())
-//				.andReturn();
-//		
-//		setUpUserBefore();
-//	}
-	
-	
-//	@BeforeEach
-//	public void setUpUserBefore() throws Exception {
-//		RequestBuilder request = MockMvcRequestBuilders
-//				.post("/api/v1/cart/user/1")
-//				.accept(MediaType.APPLICATION_JSON)
-//				.content("{\"productId\": 1}")
-//				.accept(MediaType.APPLICATION_JSON)
-//				.contentType(MediaType.APPLICATION_JSON);
-//		
-//		MvcResult result = mockMvc.perform(request)
-//				.andExpect(status().isCreated())
-//				.andReturn();
-//	}
-//	
-//	
 }

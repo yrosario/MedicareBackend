@@ -31,8 +31,8 @@ public class CartItem {
 		this.id = null;
 	}
 	
-	public CartItem(Cart cart, Product product) {
-		this();
+	public CartItem(Long id, Cart cart, Product product) {
+		this.id = id;
 		this.cart = cart;
 		this.product = product;
 	}

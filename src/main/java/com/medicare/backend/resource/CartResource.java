@@ -44,9 +44,9 @@ public class CartResource {
 	public ResponseEntity<?> getCartItem(@PathVariable("id") Long id){
 		
 		User user = userService.findById(id);
-		if(user == null)
+		if(user == null) {
 			return new ResponseEntity<String>("{User:Not_Found}", HttpStatus.NOT_FOUND);
-
+		}
 		
 		Cart cart = user.getCart();
 		
@@ -54,8 +54,8 @@ public class CartResource {
 			return new ResponseEntity<String>("{Cart:Not_Found}", HttpStatus.NOT_FOUND);
 		}	
 		
-		List<CartItem> cartItems = cartItemService.findAllById(id);
-		return new ResponseEntity<>(cartItems, HttpStatus.OK);
+		
+		return new ResponseEntity<>(cart.getCartItems(), HttpStatus.OK);
 	}
 	
 	@PostMapping("/{id}")
@@ -67,7 +67,7 @@ public class CartResource {
 		
 		Cart cart = user.getCart();
 		if(cart == null) {
-			return new ResponseEntity<>("{Cart:Not found}", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("{Cart:Not_found}", HttpStatus.NOT_FOUND);
 		}
 		
 		Long productId = request.get("productId");
@@ -77,18 +77,20 @@ public class CartResource {
 		}
 		
 		Product product = productService.findById(productId);
-		
-		CartItem cartItem = new CartItem(cart, product);
-		
-		boolean itemExist = user.getCart().getCartItems().stream().anyMatch(item -> item.getProduct().getPid() == product.getPid());
-		if(itemExist) {
-			return new ResponseEntity<>("{Item:Iteam_already_incart}", HttpStatus.CONFLICT);
+		if(product == null) {
+			return new ResponseEntity<> ("{product:Not_found}",HttpStatus.NOT_FOUND);
 		}
+		
+		CartItem cartItem = new CartItem();
+		cartItem.setCart(cart);
+		cartItem.setProduct(product);
+		
+
 		cartService.save(cart);
 		cartItemService.save(cartItem);
 		
 		
-		return new ResponseEntity<>(product, HttpStatus.CREATED);
+		return new ResponseEntity<>(cart.getCartItems(), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}/item/{itemId}")

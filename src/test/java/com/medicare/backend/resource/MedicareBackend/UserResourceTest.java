@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 import com.medicare.backend.model.Role;
 import com.medicare.backend.model.User;
+import com.medicare.backend.service.RoleServiceImpl;
 import com.medicare.backend.service.UserServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -32,6 +33,9 @@ public class UserResourceTest {
 	
 	@MockBean
 	private UserServiceImpl userService;
+	
+	@MockBean
+	private RoleServiceImpl roleService;
 	
 	private User user;
 	
@@ -75,6 +79,7 @@ public class UserResourceTest {
 		Role role = new Role(2l,"Admin");
 		role.setId(2L);
 	    user.setRole(role);
+	    when(roleService.findById(Mockito.anyLong())).thenReturn(user.getRole());
 		when(userService.save(user)).thenReturn(user);
 			
 		RequestBuilder request = MockMvcRequestBuilders
@@ -104,6 +109,7 @@ public class UserResourceTest {
 		role.setId(2L);
 	    user.setRole(role);
 	    
+	    when(roleService.findById(Mockito.anyLong())).thenReturn(user.getRole());
 	    when(userService.findById(Mockito.anyLong())).thenReturn(user);
 		when(userService.save(user)).thenReturn(user);
 

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.medicare.backend.model.Category;
 import com.medicare.backend.model.Product;
-
+import com.medicare.backend.service.CategoryServiceImpl;
 import com.medicare.backend.service.ProductServiceImpl;
 
 
@@ -38,6 +38,9 @@ public class ProductResourceTest {
 	
 	@MockBean
 	private ProductServiceImpl productService;
+	
+	@MockBean
+	private CategoryServiceImpl categoryService;
 	
 	private List<Product> products;
 	
@@ -106,6 +109,7 @@ public class ProductResourceTest {
 	@Test
 	public void saveProduct_test() throws Exception{
 		
+		when(categoryService.findById(Mockito.anyLong())).thenReturn(products.get(0).getCategory());
 		when(productService.save(Mockito.any(Product.class))).thenReturn(products.get(0));
 		
 		RequestBuilder request = MockMvcRequestBuilders.post("/api/v1/product")
@@ -140,6 +144,7 @@ public class ProductResourceTest {
 		product.setNumberOfViews(100);
 		product.setQty(50);
 		
+		when(categoryService.findById(Mockito.anyLong())).thenReturn(products.get(0).getCategory());
 		when(productService.findById(Mockito.anyLong())).thenReturn(product);
 		when(productService.update(Mockito.any(Product.class))).thenReturn(product);
 		

@@ -34,6 +34,7 @@ import com.medicare.backend.model.Product;
 import com.medicare.backend.model.User;
 import com.medicare.backend.service.CartItemServiceImpl;
 import com.medicare.backend.service.CartServiceImpl;
+import com.medicare.backend.service.ProductServiceImpl;
 import com.medicare.backend.service.UserServiceImpl;
 
 
@@ -55,6 +56,9 @@ public class CartResourceTest {
 	
 	@MockBean
 	private UserServiceImpl userService;
+	
+	@MockBean
+	private ProductServiceImpl productService;
 
 	private User user;
 	private Cart cart;
@@ -71,7 +75,7 @@ public class CartResourceTest {
 		
 		cart = new Cart();
 		cartItems = new ArrayList<>();
-		Category category = new Category(1L,"Paint Relief");
+		Category category = new Category(1L,"Pain Relief");
 		
 		//Cart Items here
 		cartItems.add(new CartItem(1L, cart, new Product(1L, "Aspirin", "Aspirin inc", 8.99f, true,40,null,
@@ -118,7 +122,7 @@ public class CartResourceTest {
 		    .andExpect(jsonPath("$[0].product.numberOfViews").value(40))
 		    .andExpect(jsonPath("$[0].product.qty").value(0))
 		    .andExpect(jsonPath("$[0].product.category.id").value(1))
-		    .andExpect(jsonPath("$[0].product.category.name").value("Paint Relief"))
+		    .andExpect(jsonPath("$[0].product.category.name").value("Pain Relief"))
 			.andExpect(status().isOk());
 		
 
@@ -128,6 +132,7 @@ public class CartResourceTest {
 	public void addItemToCart_test() throws Exception {
      	
         when(userService.findById(Mockito.anyLong())).thenReturn(user);
+        when(productService.findById(Mockito.anyLong())).thenReturn(cartItems.get(0).getProduct());
 	    when(cartItemService.save(Mockito.any(CartItem.class))).thenReturn(cartItems.get(0));
 	    
 	    RequestBuilder request = MockMvcRequestBuilders.post("/api/v1/cart/user/1")
@@ -146,7 +151,7 @@ public class CartResourceTest {
 		    .andExpect(jsonPath("$[0].product.numberOfViews").value(40))
 		    .andExpect(jsonPath("$[0].product.qty").value(0))
 		    .andExpect(jsonPath("$[0].product.category.id").value(1))
-		    .andExpect(jsonPath("$[0].product.category.name").value("Paint Relief"))
+		    .andExpect(jsonPath("$[0].product.category.name").value("Pain Relief"))
 			.andExpect(status().isCreated());
 		
 

@@ -3,6 +3,7 @@ package com.medicare.backend.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Cart {
 	@JsonIgnore
 	private User cartUser;
 	
-	@OneToMany(mappedBy="cart", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="cart", fetch=FetchType.LAZY, cascade = { CascadeType.ALL})
     @JsonIgnore
 	private Set<CartItem> cartItems = new HashSet<CartItem>();
 

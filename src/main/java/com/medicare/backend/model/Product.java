@@ -33,9 +33,7 @@ public class Product {
 	@Column(name="image_blob")
 	@Lob
 	private byte[] imageBlob;
-	@JsonIgnore
-	@ManyToMany(mappedBy = "products")
-	private Set<User> users = new HashSet<>();
+	
 	@ManyToOne
 	private Category category;
 	
@@ -44,7 +42,7 @@ public class Product {
 	}
 
 	public Product(String name, String brand, float price, boolean active, int numberOfViews, byte[] imageBlob,
-			Set<User> users, Category category, int qty) {
+			 Category category, int qty) {
 		this();
 		this.name = name;
 		this.brand = brand;
@@ -52,7 +50,6 @@ public class Product {
 		this.active = active;
 		this.numberOfViews = numberOfViews;
 		this.imageBlob = imageBlob;
-		this.users = users;
 		this.category = category;
 		this.qty =0;
 	}
@@ -84,16 +81,6 @@ public class Product {
 
 	public Long getPid() {
 		return pid;
-	}
-
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(User user) {
-		if(user != null) {
-		     this.users.add(user);
-		}
 	}
 	
 
@@ -156,8 +143,6 @@ public class Product {
 		builder.append(numberOfViews);
 		builder.append(", imageBlob=");
 		builder.append(imageBlob);
-		builder.append(", users=");
-		builder.append(users);
 		builder.append(", category=");
 		builder.append(category);
 		builder.append("]");

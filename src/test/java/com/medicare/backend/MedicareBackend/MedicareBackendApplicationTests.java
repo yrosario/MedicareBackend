@@ -19,20 +19,5 @@ class MedicareBackendApplicationTests {
 	void contextLoads() {
 	}
 	
-	@Test
-	void createUser() {
-		User user = new User();
-		user.setFirstname("Bob");
-		user.setLastname("Smith");
-		user.setPassword("testpassword");
-		user.setEmail("asdf@gmail.com");
-		
-		Product product = new Product();
-		product.setName("Vitamin c");
-		product.setPrice(7.45f);
-		user.setProducts(product);
-		
-		userRepository.save(user);
-	}
 
 }

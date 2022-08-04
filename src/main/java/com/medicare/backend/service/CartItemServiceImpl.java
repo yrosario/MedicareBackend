@@ -1,7 +1,9 @@
 package com.medicare.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import com.medicare.backend.model.CartItem;
 import com.medicare.backend.repository.CartItemRepository;
 
 @Service
-public class CartItemService implements GenericService<CartItem, Long>{
+public class CartItemServiceImpl implements GenericService<CartItem, Long>{
 
 	@Autowired
 	private CartItemRepository cartItemRepository;
@@ -43,6 +45,13 @@ public class CartItemService implements GenericService<CartItem, Long>{
 			return true;
 		}
 		return false;
+	}
+	
+	public List<CartItem> findAllById(Long id) {
+		List<CartItem> cartItems = cartItemRepository
+							.findAll().stream().filter(item -> item.getCart().getId() == id)
+							.collect(Collectors.toList());
+		return cartItems;
 	}
 
 }

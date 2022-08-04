@@ -1,6 +1,7 @@
 package com.medicare.backend.resource;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import com.medicare.backend.model.Cart;
 import com.medicare.backend.model.CartItem;
 import com.medicare.backend.model.Product;
 import com.medicare.backend.model.User;
+import com.medicare.backend.service.CartItemServiceImpl;
 import com.medicare.backend.service.GenericService;
 
 @CrossOrigin
@@ -33,7 +35,7 @@ public class CartResource {
 	private GenericService<User, Long> userService;
 	
 	@Autowired
-	private GenericService<CartItem, Long> cartItemService;
+	private CartItemServiceImpl cartItemService;
 	
 	@Autowired
 	private GenericService<Product, Long> productService;
@@ -50,9 +52,10 @@ public class CartResource {
 		
 		if(cart == null) {
 			return new ResponseEntity<String>("{Cart:Not_Found}", HttpStatus.NOT_FOUND);
-		}
+		}	
 		
-		return new ResponseEntity<>(user.getCart().getCartItems(), HttpStatus.OK);
+		List<CartItem> cartItems = cartItemService.findAllById(id);
+		return new ResponseEntity<>(cartItems, HttpStatus.OK);
 	}
 	
 	@PostMapping("/{id}")
@@ -76,6 +79,11 @@ public class CartResource {
 		Product product = productService.findById(productId);
 		
 		CartItem cartItem = new CartItem(cart, product);
+		
+		boolean itemExist = user.getCart().getCartItems().stream().anyMatch(item -> item.getProduct().getPid() == product.getPid());
+		if(itemExist) {
+			return new ResponseEntity<>("{Item:Iteam_already_incart}", HttpStatus.CONFLICT);
+		}
 		cartService.save(cart);
 		cartItemService.save(cartItem);
 		

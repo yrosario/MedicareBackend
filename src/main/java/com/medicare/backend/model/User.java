@@ -1,7 +1,5 @@
 package com.medicare.backend.model;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -42,7 +40,6 @@ public class User {
 			inverseJoinColumns = { @JoinColumn(name = "pid", nullable = false ) }
 			)
 
-	private Set<Product> products = new HashSet<>();
 	
 	@OneToOne(cascade = {CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JsonIgnore
@@ -57,12 +54,11 @@ public class User {
 		this.cart.setCartUser(this);
 	}
 	
-	public User(String firstname, String lastname, String email, Set<Product> products, String password, String username) {
+	public User(String firstname, String lastname, String email, String password, String username) {
 		this();
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.email = email;
-		this.products = products;
 		this.password = password;
 		this.username = username;
 	}
@@ -116,16 +112,6 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(Product product) {
-		if(product != null) {
-		     this.products.add(product);
-		}
 	}
 	
 	public Role getRole() {

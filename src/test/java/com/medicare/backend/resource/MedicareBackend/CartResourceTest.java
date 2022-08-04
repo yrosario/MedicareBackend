@@ -4,6 +4,7 @@ package com.medicare.backend.resource.MedicareBackend;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,11 +23,20 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 
 import com.medicare.backend.model.Cart;
+import com.medicare.backend.model.CartItem;
+import com.medicare.backend.model.Product;
 import com.medicare.backend.model.User;
+import com.medicare.backend.service.CartItemServiceImpl;
 import com.medicare.backend.service.CartServiceImpl;
-import com.medicare.backend.service.GenericService;
+import com.medicare.backend.service.UserServiceImpl;
 
 
 
@@ -38,10 +48,15 @@ public class CartResourceTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	
+
 	@MockBean
 	private CartServiceImpl cartService;
 	
+	@MockBean
+    private CartItemServiceImpl cartItemService;
+	
+	@MockBean
+	private UserServiceImpl userService;
 	
 	@Test
 	public void getCartItem_no_user_test() throws Exception {
@@ -67,18 +82,22 @@ public class CartResourceTest {
 		user.setFirstname("John");
 		user.setLastname("William");
 		user.setUid(1l);
-		
-		
-		Cart cart = new Cart(user);
-		
-        user.setCart(cart);;
+		Cart cart = new Cart();
+		List<CartItem> cartItems = new ArrayList();
+		cartItems.add(new CartItem(cart, new Product()));
+		cartItems.stream().forEach(item -> {cart.setCartItems(item);});
         cart.setCartUser(user);
+        user.setCart(cart);
         
         
-		when(cartService.findById(Mockito.anyLong())).thenReturn(cart);
+        when(userService.findById(Mockito.anyLong())).thenReturn(user);
+		//when(cartService.findById(Mockito.anyLong())).thenReturn(cart);
+        when(cartItemService.findAllById(Mockito.anyLong())).thenReturn(cartItems);
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart/user/1"))
-				.andExpect(status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart/user/1")
+						.accept(MediaType.APPLICATION_JSON))
+		    .andExpect(jsonPath("$.product").value("John"))
+			.andExpect(status().isOk());
 		
 
 	}

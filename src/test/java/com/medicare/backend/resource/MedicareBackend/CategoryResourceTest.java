@@ -23,44 +23,46 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
+import com.medicare.backend.model.Category;
 import com.medicare.backend.model.Role;
+import com.medicare.backend.service.CategoryServiceImpl;
 import com.medicare.backend.service.RoleServiceImpl;
 
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @SpringBootTest 
-public class RoleResourceTest {
+public class CategoryResourceTest {
 	
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private RoleServiceImpl roleService;
+	private CategoryServiceImpl categoryService;
 	
-	private List<Role> roles;
+	private List<Category> categories;
 	
 	@BeforeEach
 	private void setUp() {
 		
-		roles = new ArrayList<>();
+		categories = new ArrayList<>();
 		
-		roles.add(new Role(1L, "User"));
-		roles.add(new Role(2L, "Admin"));
+		categories.add(new Category(1L, "Pain Relief"));
+		categories.add(new Category(2L, "Cold Flu Medicine"));
 		
 	}
 	
 	@Test
 	public void getRole_test() throws Exception {
 
-		when(roleService.findAll()).thenReturn(roles);
+		when(categoryService.findAll()).thenReturn(categories);
 		
 		RequestBuilder request = MockMvcRequestBuilders
-				.get("/api/v1/role").accept(MediaType.APPLICATION_JSON);
+				.get("/api/v1/category").accept(MediaType.APPLICATION_JSON);
 		 
 		mockMvc.perform(request)
 				.andExpect(jsonPath("$[0].id").value("1"))
-				.andExpect(jsonPath("$[0].name").value("User"))
+				.andExpect(jsonPath("$[0].name").value("Pain Relief"))
 				.andExpect(status().isOk())
 				.andReturn();		
 	}
@@ -68,14 +70,14 @@ public class RoleResourceTest {
 	@Test
 	public void getRoleById_test() throws Exception {
 
-		when(roleService.findById(Mockito.anyLong())).thenReturn(roles.get(0));
+		when(categoryService.findById(Mockito.anyLong())).thenReturn(categories.get(0));
 		
 		RequestBuilder request = MockMvcRequestBuilders
-				.get("/api/v1/role/1").accept(MediaType.APPLICATION_JSON);
+				.get("/api/v1/category/1").accept(MediaType.APPLICATION_JSON);
 		 
 		mockMvc.perform(request)
 				.andExpect(jsonPath("id").value("1"))
-				.andExpect(jsonPath("name").value("User"))
+				.andExpect(jsonPath("name").value("Pain Relief"))
 				.andExpect(status().isOk())
 				.andReturn();		
 	}
@@ -83,17 +85,16 @@ public class RoleResourceTest {
 	@Test
 	public void saveRole_test() throws Exception {
 
-		when(roleService.save(Mockito.any(Role.class))).thenReturn(roles.get(0));
+		when(categoryService.save(Mockito.any(Category.class))).thenReturn(categories.get(0));
 		
 		RequestBuilder request = MockMvcRequestBuilders
-				.post("/api/v1/role").accept(MediaType.APPLICATION_JSON)
-				.content("{\"name\":\"User\"}")
+				.post("/api/v1/category").accept(MediaType.APPLICATION_JSON)
+				.content("{\"name\":\"Vitamin\"}")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		 
 		mockMvc.perform(request)
-				.andExpect(jsonPath("id").value("1"))
-				.andExpect(jsonPath("name").value("User"))
+				.andExpect(jsonPath("name").value("Pain Relief"))
 				.andExpect(status().isCreated())
 				.andReturn();		
 	}
@@ -101,22 +102,22 @@ public class RoleResourceTest {
 	@Test
 	public void updateRole_test() throws Exception {
 		
-		Role role = roles.get(0);
-		role.setName("TestRole");
+		Category category = categories.get(0);
+		category.setName("TestCategory");
 
-		when(roleService.findById(Mockito.anyLong())).thenReturn(role);
-		when(roleService.save(Mockito.any(Role.class))).thenReturn(role);
+		when(categoryService.findById(Mockito.anyLong())).thenReturn(category);
+		when(categoryService.update(Mockito.any(Category.class))).thenReturn(category);
 		
 		RequestBuilder request = MockMvcRequestBuilders
-				.put("/api/v1/role")
+				.put("/api/v1/category")
 				.accept(MediaType.APPLICATION_JSON)
-				.content("{\"id\":1,\"name\":\"TestRole\"}")
+				.content("{\"id\":1,\"name\":\"TestCategory\"}")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		 
 		mockMvc.perform(request)
 				.andExpect(jsonPath("id").value("1"))
-				.andExpect(jsonPath("name").value("TestRole"))
+				.andExpect(jsonPath("name").value("TestCategory"))
 				.andExpect(status().isCreated())
 				.andReturn();		
 	}
@@ -124,14 +125,14 @@ public class RoleResourceTest {
 	@Test
 	public void deleteRoleById_test() throws Exception {
 		
-		Role role = roles.get(0);
-		role.setName("TestRole");
+		Category category = categories.get(0);
+		category.setName("TestRole");
 
-		when(roleService.findById(Mockito.anyLong())).thenReturn(role);
-		when(roleService.delete(Mockito.anyLong())).thenReturn(true);
+		when(categoryService.findById(Mockito.anyLong())).thenReturn(category);
+		when(categoryService.delete(Mockito.anyLong())).thenReturn(true);
 		
 		RequestBuilder request = MockMvcRequestBuilders
-				.delete("/api/v1/role/1")
+				.delete("/api/v1/category/1")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		 

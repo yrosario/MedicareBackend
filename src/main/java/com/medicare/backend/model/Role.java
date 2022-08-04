@@ -19,8 +19,8 @@ public class Role {
 		this.id = null;
 	}
 
-	public Role(String name) {
-		this();
+	public Role(Long id, String name) {
+		this.id = id;
 		this.name = name;
 	}
 
@@ -39,6 +39,7 @@ public class Role {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
 
 	@Override
 	public String toString() {

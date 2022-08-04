@@ -77,10 +77,10 @@ public class ProductResource {
 		Product Product = productService.findById(id);
 		if(Product != null) {
 			productService.delete(id);
-			return new ResponseEntity<>("Product was deleted", HttpStatus.OK);
+			return new ResponseEntity<>("{Product:deleted}", HttpStatus.OK);
 		}
 		
-		return new ResponseEntity<>("Product was not found", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>("{Product:Not_found}", HttpStatus.NOT_FOUND);
 	}
 	
 	
@@ -105,10 +105,10 @@ public class ProductResource {
 		product.setCategory(category);
 		
 		if(product != null) {
-			return new ResponseEntity<Product>(product, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Product>(product, HttpStatus.CREATED);
 		}
 		
-		return new ResponseEntity<Product>(product, HttpStatus.CREATED);
+		return new ResponseEntity<Product>(product, HttpStatus.BAD_REQUEST);
 	}
 	
 	@PostMapping("/{id}/upload")

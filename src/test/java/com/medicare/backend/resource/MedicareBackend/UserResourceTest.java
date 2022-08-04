@@ -44,8 +44,7 @@ public class UserResourceTest {
 		user.setEmail("jsmithm@gmail.com");
 		user.setUsername("jsmith");
 		user.setPassword("password");
-		Role role = new Role("User");
-		role.setId(1L);
+		Role role = new Role(1L, "User");
 		user.setRole(role);
 	}
 	
@@ -73,11 +72,10 @@ public class UserResourceTest {
 	@Test
 	public void saveUser_test() throws Exception {
 		
-		Role role = new Role("Admin");
+		Role role = new Role(2l,"Admin");
 		role.setId(2L);
 	    user.setRole(role);
 		when(userService.save(user)).thenReturn(user);
-		System.out.print(user.getRole().toString());
 			
 		RequestBuilder request = MockMvcRequestBuilders
 				.post("/api/v1/user")
@@ -102,7 +100,7 @@ public class UserResourceTest {
 	@Test
 	public void updateUser_test() throws Exception {
 		
-		Role role = new Role("Admin");
+		Role role = new Role(2L,"Admin");
 		role.setId(2L);
 	    user.setRole(role);
 	    
@@ -133,7 +131,7 @@ public class UserResourceTest {
 	@Test
 	public void deleteUser_test() throws Exception {
 		
-		Role role = new Role("Admin");
+		Role role = new Role(2L,"Admin");
 		role.setId(2L);
 	    user.setRole(role);
 	    

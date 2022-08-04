@@ -1,7 +1,6 @@
 package com.medicare.backend.resource;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.medicare.backend.model.Product;
 import com.medicare.backend.model.Role;
 import com.medicare.backend.model.User;
 import com.medicare.backend.service.GenericService;
@@ -39,10 +37,6 @@ public class UserResource {
 	
 	@Autowired
 	private GenericService<Role, Long> roleService;
-	
-	@Autowired
-	private GenericService<Product, Long> productService;
-	
 	
 	private static final List<String> userFieldsList = new ArrayList<>();
 	

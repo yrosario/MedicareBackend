@@ -1,7 +1,7 @@
 package com.medicare.backend.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ public class Cart {
 	
 	@OneToMany(mappedBy="cart", fetch=FetchType.LAZY, cascade = { CascadeType.ALL})
     @JsonIgnore
-	private Set<CartItem> cartItems = new HashSet<CartItem>();
+	private List<CartItem> cartItems = new ArrayList<CartItem>();
 
 	public Cart() {
 	}
@@ -52,7 +52,7 @@ public class Cart {
 	}
 
 
-	public Set<CartItem> getCartItems() {
+	public List<CartItem> getCartItems() {
 		return cartItems;
 	}
 

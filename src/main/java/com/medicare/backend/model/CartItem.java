@@ -18,7 +18,7 @@ public class CartItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private int quantity = 0;
+	private int quantity = 1;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore

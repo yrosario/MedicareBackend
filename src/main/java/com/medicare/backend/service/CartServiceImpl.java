@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.medicare.backend.model.Cart;
-import com.medicare.backend.repository.CartItemRepository;
 import com.medicare.backend.repository.CartRepository;
 
 @Service
@@ -16,8 +15,6 @@ public class CartServiceImpl implements GenericService<Cart, Long> {
 	@Autowired
 	private CartRepository cartRepository;
 	
-	@Autowired
-	private CartItemRepository cartItemReposiotry;
 
 	@Override
 	public Cart save(Cart cart) {

@@ -24,9 +24,7 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 import com.medicare.backend.model.Category;
-import com.medicare.backend.model.Role;
 import com.medicare.backend.service.CategoryServiceImpl;
-import com.medicare.backend.service.RoleServiceImpl;
 
 
 @ExtendWith(SpringExtension.class)

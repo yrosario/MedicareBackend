@@ -114,7 +114,7 @@ public class CartResourceTest {
 		
 		mockMvc.perform(request)
 		    .andExpect(jsonPath("$[0].id").value(1))
-		    .andExpect(jsonPath("$[0].quantity").value(0))
+		    .andExpect(jsonPath("$[0].quantity").value(1))
 		    .andExpect(jsonPath("$[0].product.pid").value(1))
 		    .andExpect(jsonPath("$[0].product.brand").value("Aspirin inc"))
 		    .andExpect(jsonPath("$[0].product.price").value(8.99))

@@ -81,6 +81,7 @@ public class CartResourceTest {
 		cartItems.add(new CartItem(1L, cart, new Product(1L, "Aspirin", "Aspirin inc", 8.99f, true,40,null,
 				category, 45)));
 		
+		
 		cartItems.stream().forEach(item -> {cart.setCartItems(item);});
         cart.setCartUser(user);
         user.setCart(cart);
@@ -107,6 +108,7 @@ public class CartResourceTest {
 	public void getCartItem_user_test() throws Exception {
         
         when(userService.findById(Mockito.anyLong())).thenReturn(user);
+        this.cartItems.get(0).setQuantity(1);
 	    when(cartItemService.findAllById(Mockito.anyLong())).thenReturn(cartItems);
 	    
 	    RequestBuilder request = MockMvcRequestBuilders.get("/api/v1/cart/user/1")

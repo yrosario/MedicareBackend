@@ -18,7 +18,7 @@ public class CartItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private int quantity = 1;
+	private int quantity;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
@@ -29,12 +29,14 @@ public class CartItem {
 
 	public CartItem() {
 		this.id = null;
+		this.quantity = 1;
 	}
 	
 	public CartItem(Long id, Cart cart, Product product) {
 		this.id = id;
 		this.cart = cart;
 		this.product = product;
+		this.quantity =1;
 	}
 
 	public Long getId() {
